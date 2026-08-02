@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ form.title }}</title>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="form-container">
+
+        <!-- ============================== -->
+        <!-- FORM HEADER -->
+        <!-- ============================== -->
+
+        <div class="form-header">
+
+            <h1>{{ form.title }}</h1>
+
+            <p>{{ form.description }}</p>
+
+        </div>
+
+        <!-- ============================== -->
+        <!-- FORM -->
+        <!-- ============================== -->
+
+        <form action="{{ url_for('submit') }}" method="POST">
+
+            <!-- Hidden Form ID -->
+
+            <input type="hidden" name="form_id" value="{{ form_id }}">
+
+            {% for question in form.questions %}
+
+            <div class="question-card">
+
+                <label>
+
+                    {{ question.label }}
+
+                    {% if question.required %}
+
+                    <span class="required">*</span>
+
+                    {% endif %}
+
+                </label>
+
+                <!-- ============================== -->
+                <!-- SHORT TEXT -->
+                <!-- ============================== -->
+
+                {% if question.type=="text" %}
+
+                <input type="text" name="{{ question.label }}" placeholder="Your answer" {% if question.required
+                    %}required{% endif %}>
+
+                <!-- ============================== -->
+                <!-- EMAIL -->
+                <!-- ============================== -->
+
+                {% elif question.type=="email" %}
+
+                <input type="email" name="{{ question.label }}" placeholder="Your Email" autocomplete="email" {% if
+                    question.required %}required{% endif %}>
+
+                <!-- ============================== -->
+                <!-- PARAGRAPH -->
+                <!-- ============================== -->
+
+                {% elif question.type=="paragraph" %}
+
+                <textarea name="{{ question.label }}" rows="5" placeholder="Write your answer here" {% if
+                    question.required %}required{% endif %}></textarea>
+
+                <!-- ============================== -->
+                <!-- DROPDOWN -->
+                <!-- ============================== -->
+
+                {% elif question.type=="dropdown" %}
+
+                <select name="{{ question.label }}" {% if question.required %}required{% endif %}>
+
+                    <option value="">Select an option</option>
+
+                    {% for option in question.options %}
+
+                    <option value="{{ option }}">
+
+                        {{ option }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <!-- ============================== -->
+                <!-- RATING -->
+                <!-- ============================== -->
+
+                {% elif question.type=="rating" %}
+
+                <select name="{{ question.label }}" {% if question.required %}required{% endif %}>
+
+                    <option value="">Select Rating</option>
+
+                    <option value="1">⭐</option>
+
+                    <option value="2">⭐⭐</option>
+
+                    <option value="3">⭐⭐⭐</option>
+
+                    <option value="4">⭐⭐⭐⭐</option>
+
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+
+                </select>
+
+                <!-- ============================== -->
+                <!-- RADIO -->
+                <!-- ============================== -->
+
+                {% elif question.type=="radio" %}
+
+                <div class="radio-group">
+
+                    {% for option in question.options %}
+
+                    <label class="radio-option">
+
+                        <input type="radio" name="{{ question.label }}" value="{{ option }}" {% if question.required
+                            %}required{% endif %}>
+
+                        <span>{{ option }}</span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ============================== -->
+                <!-- CHECKBOX -->
+                <!-- ============================== -->
+
+                {% elif question.type=="checkbox" %}
+
+                <div class="checkbox-group">
+
+                    {% for option in question.options %}
+
+                    <label class="checkbox-option">
+
+                        <input type="checkbox" name="{{ question.label }}[]" value="{{ option }}">
+
+                        <span>{{ option }}</span>
+
+                    </label>
+
+                    {% endfor %}
+
+                </div>
+
+                <!-- ============================== -->
+                <!-- NUMBER -->
+                <!-- ============================== -->
+
+                {% elif question.type=="number" %}
+
+                <input type="number" name="{{ question.label }}" placeholder="Enter a number" {% if question.required
+                    %}required{% endif %}>
+
+                <!-- ============================== -->
+                <!-- DATE -->
+                <!-- ============================== -->
+
+                {% elif question.type=="date" %}
+
+                <input type="date" name="{{ question.label }}" {% if question.required %}required{% endif %}>
+
+                <!-- ============================== -->
+                <!-- TIME -->
+                <!-- ============================== -->
+
+                {% elif question.type=="time" %}
+
+                <input type="time" name="{{ question.label }}" {% if question.required %}required{% endif %}>
+
+                <!-- ============================== -->
+                <!-- DEFAULT -->
+                <!-- ============================== -->
+
+                {% else %}
+
+                <input type="text" name="{{ question.label }}" placeholder="Your answer" {% if question.required
+                    %}required{% endif %}>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+            <!-- ============================== -->
+            <!-- SUBMIT BUTTON -->
+            <!-- ============================== -->
+
+            <button type="submit" class="submit-btn">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                Submit Response
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- ============================== -->
+    <!-- FOOTER -->
+    <!-- ============================== -->
+
+    <footer>
+
+        AI Form Generator • Powered by Gemini AI • Flask • SQLite
+
+    </footer>
+
+</body>
+
+</html>

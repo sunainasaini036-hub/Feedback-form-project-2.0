@@ -4,3 +4,5 @@ google-genai==2.11.0
 python-dotenv==1.2.2
 openpyxl==3.1.5
 requests==2.34.2
+qrcode==8.2
+pillow==12.3.0

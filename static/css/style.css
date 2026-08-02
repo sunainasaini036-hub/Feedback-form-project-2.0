@@ -1,0 +1,970 @@
+/* ==========================================================
+   AI-POWERED FEEDBACK ANALYSIS SYSTEM
+   Modern UI Theme
+   Developed by Sunaina Saini
+==========================================================*/
+
+/*=============================
+        GOOGLE FONT
+==============================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/*=============================
+        RESET
+==============================*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    background: #F8FAFC;
+    color: #1F2937;
+    line-height: 1.7;
+
+}
+
+/*=============================
+        COLORS
+==============================*/
+
+:root {
+
+    --primary: #6D28D9;
+    --secondary: #8B5CF6;
+    --accent: #A855F7;
+
+    --dark: #1F2937;
+    --light: #6B7280;
+
+    --white: #ffffff;
+
+    --border: #E5E7EB;
+
+    --bg: #F8FAFC;
+
+    --shadow: 0 12px 35px rgba(0, 0, 0, .08);
+
+}
+
+/*=============================
+        LINKS
+==============================*/
+
+a {
+
+    text-decoration: none;
+    color: inherit;
+
+}
+
+ul {
+
+    list-style: none;
+
+}
+
+/*=============================
+        NAVBAR
+==============================*/
+
+.navbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    background: white;
+
+    box-shadow: 0 5px 25px rgba(0, 0, 0, .05);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 7%;
+
+}
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: var(--primary);
+
+}
+
+.logo i {
+
+    font-size: 28px;
+
+}
+
+.navbar ul {
+
+    display: flex;
+
+    gap: 35px;
+
+}
+
+.navbar ul li a {
+
+    font-weight: 500;
+
+    color: #4B5563;
+
+    transition: .3s;
+
+}
+
+.navbar ul li a:hover {
+
+    color: var(--primary);
+
+}
+
+.navbar ul li a i {
+
+    margin-right: 8px;
+
+}
+
+/*=============================
+        HERO
+==============================*/
+
+.hero {
+
+    width: 90%;
+
+    max-width: 1250px;
+
+    margin: 70px auto;
+
+}
+
+.hero-content {
+
+    background: white;
+
+    border-radius: 28px;
+
+    padding: 65px;
+
+    box-shadow: var(--shadow);
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+/* decorative circles */
+
+.hero-content::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+
+    height: 280px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(135deg, #A855F7, #6D28D9);
+
+    top: -120px;
+
+    right: -120px;
+
+    opacity: .08;
+
+}
+
+.hero-content::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+
+    height: 180px;
+
+    border-radius: 50%;
+
+    background: #8B5CF6;
+
+    left: -70px;
+
+    bottom: -70px;
+
+    opacity: .08;
+
+}
+
+.hero-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: #F3E8FF;
+
+    color: var(--primary);
+
+    padding: 12px 22px;
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    margin-bottom: 25px;
+
+}
+
+.hero h1 {
+
+    font-size: 52px;
+
+    font-weight: 800;
+
+    color: var(--dark);
+
+    line-height: 1.2;
+
+    margin-bottom: 20px;
+
+}
+
+.hero p {
+
+    color: var(--light);
+
+    font-size: 18px;
+
+    max-width: 800px;
+
+    margin-bottom: 40px;
+
+}
+
+/*=============================
+        FORM
+==============================*/
+
+.hero form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 25px;
+
+}
+
+.hero textarea {
+
+    width: 100%;
+
+    min-height: 180px;
+
+    resize: none;
+
+    border: 2px solid var(--border);
+
+    border-radius: 18px;
+
+    padding: 22px;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition: .3s;
+
+    background: #FCFCFD;
+
+}
+
+.hero textarea:focus {
+
+    border-color: var(--primary);
+
+    box-shadow: 0 0 0 5px rgba(109, 40, 217, .12);
+
+}
+
+.hero button {
+
+    align-self: flex-start;
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 16px 34px;
+
+    border-radius: 14px;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    color: white;
+
+    background: linear-gradient(135deg, #6D28D9, #8B5CF6);
+
+    transition: .35s;
+
+    box-shadow: 0 15px 30px rgba(109, 40, 217, .25);
+
+}
+
+.hero button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 22px 35px rgba(109, 40, 217, .35);
+
+}
+
+.hero button i {
+
+    margin-right: 10px;
+
+}
+
+/*==========================================================
+                POPULAR TEMPLATES
+==========================================================*/
+
+.examples {
+
+    width: 90%;
+    max-width: 1250px;
+    margin: 80px auto;
+
+}
+
+.examples h2 {
+
+    text-align: center;
+    font-size: 36px;
+    color: var(--dark);
+    margin-bottom: 50px;
+    font-weight: 700;
+
+}
+
+.cards {
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+
+}
+
+.card {
+
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 35px 28px;
+
+    cursor: pointer;
+
+    transition: .35s;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+.card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 5px;
+
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+
+}
+
+.card:hover {
+
+    transform: translateY(-10px);
+
+    box-shadow: 0 25px 45px rgba(109, 40, 217, .18);
+
+}
+
+.card h3 {
+
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: var(--dark);
+
+}
+
+.card p {
+
+    color: var(--light);
+    font-size: 15px;
+
+}
+
+.card i {
+
+    font-size: 45px;
+    color: var(--primary);
+    margin-bottom: 20px;
+
+}
+
+/*==========================================================
+                FEATURES
+==========================================================*/
+
+.features {
+
+    width: 90%;
+    max-width: 1250px;
+
+    margin: 90px auto;
+
+}
+
+.features h2 {
+
+    text-align: center;
+
+    font-size: 36px;
+
+    margin-bottom: 55px;
+
+    color: var(--dark);
+
+}
+
+.feature-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+    gap: 30px;
+
+}
+
+.feature {
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 35px;
+
+    text-align: center;
+
+    transition: .35s;
+
+    border: 1px solid var(--border);
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .05);
+
+}
+
+.feature:hover {
+
+    transform: translateY(-8px);
+
+    box-shadow: 0 22px 45px rgba(109, 40, 217, .15);
+
+}
+
+.feature i {
+
+    font-size: 55px;
+
+    color: var(--primary);
+
+    margin-bottom: 25px;
+
+}
+
+.feature h3 {
+
+    font-size: 22px;
+
+    margin-bottom: 15px;
+
+    color: var(--dark);
+
+}
+
+.feature p {
+
+    color: var(--light);
+
+    font-size: 15px;
+
+}
+
+/*==========================================================
+                SECTION TITLE
+==========================================================*/
+
+section h2 {
+
+    position: relative;
+
+}
+
+section h2::after {
+
+    content: "";
+
+    width: 90px;
+
+    height: 4px;
+
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+
+    display: block;
+
+    margin: 18px auto 0;
+
+    border-radius: 50px;
+
+}
+
+/*==========================================================
+                COMMON SPACING
+==========================================================*/
+
+section {
+
+    animation: fadeUp .8s ease;
+
+}
+
+/*==========================================================
+                    FOOTER
+==========================================================*/
+
+footer {
+
+    margin-top: 80px;
+
+    background: #111827;
+
+    color: #D1D5DB;
+
+    text-align: center;
+
+    padding: 35px 20px;
+
+    font-size: 15px;
+
+}
+
+/*==========================================================
+                    SCROLLBAR
+==========================================================*/
+
+::-webkit-scrollbar {
+
+    width: 10px;
+
+}
+
+::-webkit-scrollbar-track {
+
+    background: #F3F4F6;
+
+}
+
+::-webkit-scrollbar-thumb {
+
+    background: linear-gradient(var(--primary), var(--accent));
+
+    border-radius: 20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: var(--primary);
+
+}
+
+/*==========================================================
+                    ANIMATIONS
+==========================================================*/
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(40px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+@keyframes float {
+
+    0% {
+
+        transform: translateY(0px);
+
+    }
+
+    50% {
+
+        transform: translateY(-10px);
+
+    }
+
+    100% {
+
+        transform: translateY(0px);
+
+    }
+
+}
+
+.logo i {
+
+    animation: float 3s infinite ease-in-out;
+
+}
+
+/*==========================================================
+                    BUTTON EFFECT
+==========================================================*/
+
+button {
+
+    transition: .3s;
+
+}
+
+button:active {
+
+    transform: scale(.98);
+
+}
+
+/*==========================================================
+                    RESPONSIVE
+==========================================================*/
+
+@media(max-width:992px) {
+
+    .navbar {
+
+        flex-direction: column;
+
+        gap: 18px;
+
+        padding: 20px;
+
+    }
+
+    .navbar ul {
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 20px;
+
+    }
+
+    .hero-content {
+
+        padding: 45px;
+
+    }
+
+    .hero h1 {
+
+        font-size: 42px;
+
+    }
+
+}
+
+@media(max-width:768px) {
+
+    .hero {
+
+        margin: 40px auto;
+
+    }
+
+    .hero-content {
+
+        padding: 35px 25px;
+
+    }
+
+    .hero h1 {
+
+        font-size: 34px;
+
+    }
+
+    .hero p {
+
+        font-size: 16px;
+
+    }
+
+    .hero textarea {
+
+        min-height: 160px;
+
+    }
+
+    .hero button {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+    .examples h2,
+    .features h2 {
+
+        font-size: 30px;
+
+    }
+
+}
+
+@media(max-width:500px) {
+
+    .navbar .logo {
+
+        font-size: 18px;
+
+        text-align: center;
+
+    }
+
+    .navbar ul {
+
+        gap: 15px;
+
+    }
+
+    .navbar ul li a {
+
+        font-size: 14px;
+
+    }
+
+    .hero h1 {
+
+        font-size: 28px;
+
+    }
+
+    .hero-badge {
+
+        font-size: 14px;
+
+        padding: 10px 18px;
+
+    }
+
+}
+
+/*=========================================
+            HERO LAYOUT
+=========================================*/
+
+.hero-wrapper {
+
+    display: grid;
+
+    grid-template-columns: 1.2fr .8fr;
+
+    gap: 50px;
+
+    align-items: center;
+
+}
+
+/*=========================================
+        DASHBOARD PREVIEW
+=========================================*/
+
+.hero-dashboard {
+
+    display: flex;
+
+    justify-content: center;
+
+}
+
+.dashboard-card {
+
+    width: 100%;
+
+    max-width: 360px;
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 35px;
+
+    box-shadow: 0 20px 45px rgba(0, 0, 0, .08);
+
+    border: 1px solid var(--border);
+
+    animation: float 4s infinite ease-in-out;
+
+}
+
+.dashboard-card h3 {
+
+    color: var(--dark);
+
+    margin-bottom: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+.dashboard-card h3 i {
+
+    color: var(--primary);
+
+}
+
+.dashboard-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin: 18px 0;
+
+    font-size: 16px;
+
+    color: var(--dark);
+
+}
+
+.dashboard-item span {
+
+    font-weight: 700;
+
+    color: var(--primary);
+
+}
+
+.dashboard-card hr {
+
+    border: none;
+
+    height: 1px;
+
+    background: #E5E7EB;
+
+    margin: 25px 0;
+
+}
+
+.dashboard-score {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+.dashboard-score span {
+
+    color: #10B981;
+
+}
+
+/*=========================================
+        RESPONSIVE
+=========================================*/
+
+@media(max-width:900px) {
+
+    .hero-wrapper {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .hero-dashboard {
+
+        margin-top: 20px;
+
+    }
+
+}

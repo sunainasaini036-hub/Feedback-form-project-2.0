@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Form | AI Form Studio</title>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_form.css') }}">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+
+</head>
+
+
+<body>
+
+
+
+<!-- ================= NAVBAR ================= -->
+
+
+<nav class="navbar">
+
+
+    <div class="logo">
+
+
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+
+        <span>
+            AI Form Studio
+        </span>
+
+
+    </div>
+
+
+
+    <div class="nav-actions">
+
+
+        <a href="{{ url_for('preview_form', form_id=form_id) }}"
+           class="nav-btn secondary">
+
+
+            <i class="fa-solid fa-eye"></i>
+
+            Preview
+
+
+        </a>
+
+
+
+
+        <button type="submit"
+                form="editForm"
+                class="nav-btn primary">
+
+
+            <i class="fa-solid fa-floppy-disk"></i>
+
+            Save Changes
+
+
+        </button>
+
+
+
+    </div>
+
+
+</nav>
+
+
+
+
+
+
+<!-- ================= BACK BUTTON ================= -->
+
+
+<div class="page-nav">
+
+
+    <a href="{{ url_for('preview_form', form_id=form_id) }}"
+       class="back-btn">
+
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+
+        Back to Preview
+
+
+    </a>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- ================= HERO ================= -->
+
+
+<section class="hero">
+
+
+    <span class="hero-tag">
+
+        AI Powered Form Builder
+
+    </span>
+
+
+
+
+    <h1>
+
+        Edit Your Form
+
+    </h1>
+
+
+
+    <p>
+
+        Customize your AI-generated form before publishing.
+        Edit questions, update options, preview your changes,
+        and create a better experience for your users.
+
+    </p>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ================= FORM ================= -->
+
+
+<form id="editForm"
+      method="POST"
+      action="{{ url_for('update_form', form_id=form_id) }}">
+
+
+
+<input type="hidden"
+       name="questions"
+       id="questionsData">
+
+
+
+
+
+<div class="builder">
+
+
+
+<main class="editor">
+
+
+
+
+
+
+<!-- ================= FORM INFORMATION ================= -->
+
+
+<section class="editor-card">
+
+
+
+<div class="card-header">
+
+
+<div class="card-icon">
+
+<i class="fa-solid fa-file-lines"></i>
+
+</div>
+
+
+
+<div>
+
+<h2>
+
+Form Information
+
+</h2>
+
+
+<p>
+
+Update your form title and description.
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="form-grid">
+
+
+
+<div class="input-group full">
+
+
+<label>
+
+<i class="fa-solid fa-heading"></i>
+
+Form Title
+
+</label>
+
+
+
+<input type="text"
+       name="title"
+       value="{{ form.title }}"
+       placeholder="Enter form title">
+
+
+</div>
+
+
+
+
+
+
+
+<div class="input-group full">
+
+
+<label>
+
+<i class="fa-solid fa-align-left"></i>
+
+Description
+
+</label>
+
+
+
+<textarea rows="5"
+          name="description"
+          placeholder="Describe your form...">{{ form.description }}</textarea>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="info-row">
+
+
+
+<div class="info-box">
+
+
+<i class="fa-solid fa-list-check"></i>
+
+
+<div>
+
+<span>
+Total Questions
+</span>
+
+
+<strong id="questionCount">
+
+{{ form.questions|length }}
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="info-box">
+
+
+<i class="fa-solid fa-circle-check"></i>
+
+
+<div>
+
+
+<span>
+Status
+</span>
+
+
+<strong>
+
+Draft
+
+</strong>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+</section>
+<!-- ================= QUESTIONS SECTION ================= -->
+
+
+<section class="questions-section" id="questionsContainer">
+
+
+<div class="section-header">
+
+
+<div>
+
+
+<h2>
+
+<i class="fa-solid fa-layer-group"></i>
+
+Questions
+
+</h2>
+
+
+
+<p>
+
+Edit, duplicate or remove questions from your form.
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+{% for question in form.questions %}
+
+
+
+<div class="question-card">
+
+
+
+<div class="question-card-header">
+
+
+<div class="question-title">
+
+
+<span class="question-badge">
+
+Question {{ loop.index }}
+
+</span>
+
+
+
+<h3>
+
+{{ question.label }}
+
+</h3>
+
+
+</div>
+
+
+
+
+
+<div class="question-actions">
+
+
+
+<button type="button"
+        class="icon-btn duplicate-btn">
+
+
+<i class="fa-regular fa-copy"></i>
+
+
+</button>
+
+
+
+
+<button type="button"
+        class="icon-btn delete-btn">
+
+
+<i class="fa-solid fa-trash"></i>
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="question-body">
+
+
+
+<div class="input-group">
+
+
+<label>
+
+Question
+
+</label>
+
+
+
+<input type="text"
+       class="question-label"
+       value="{{ question.label }}"
+       placeholder="Enter question">
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="question-grid">
+
+
+
+<div class="input-group">
+
+
+<label>
+
+Question Type
+
+</label>
+
+
+
+<select class="question-type">
+
+
+<option value="text"
+{% if question.type=="text" %}selected{% endif %}>
+
+Short Answer
+
+</option>
+
+
+
+<option value="paragraph"
+{% if question.type=="paragraph" %}selected{% endif %}>
+
+Paragraph
+
+</option>
+
+
+
+<option value="email"
+{% if question.type=="email" %}selected{% endif %}>
+
+Email
+
+</option>
+
+
+
+<option value="number"
+{% if question.type=="number" %}selected{% endif %}>
+
+Number
+
+</option>
+
+
+
+<option value="dropdown"
+{% if question.type=="dropdown" %}selected{% endif %}>
+
+Dropdown
+
+</option>
+
+
+
+<option value="radio"
+{% if question.type=="radio" %}selected{% endif %}>
+
+Radio
+
+</option>
+
+
+
+<option value="checkbox"
+{% if question.type=="checkbox" %}selected{% endif %}>
+
+Checkbox
+
+</option>
+
+
+
+<option value="rating"
+{% if question.type=="rating" %}selected{% endif %}>
+
+Rating
+
+</option>
+
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="input-group">
+
+
+<label>
+
+Required
+
+</label>
+
+
+
+<label class="switch">
+
+
+<input type="checkbox"
+       class="question-required"
+       {% if question.required %}checked{% endif %}>
+
+
+<span class="slider"></span>
+
+
+</label>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- OPTIONS -->
+
+
+<div class="options-box"
+
+{% if question.type not in ['radio','checkbox','dropdown','rating'] %}
+
+style="display:none;"
+
+{% endif %}
+
+>
+
+
+<label>
+
+Answer Options
+
+</label>
+
+
+
+
+
+<div class="options-list">
+
+
+{% for option in question.options %}
+
+
+<div class="option-row">
+
+
+<input type="text"
+       class="option-input"
+       value="{{ option }}"
+       placeholder="Option">
+
+
+
+<button type="button"
+        class="remove-option">
+
+
+<i class="fa-solid fa-xmark"></i>
+
+
+</button>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+
+
+
+
+
+<button type="button"
+        class="add-option-btn">
+
+
+<i class="fa-solid fa-plus"></i>
+
+
+Add Option
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+<!-- ================= ADD QUESTION ================= -->
+
+
+<section class="add-question-section">
+
+
+
+<div class="add-question-card">
+
+
+
+<div class="add-icon">
+
+
+<i class="fa-solid fa-circle-plus"></i>
+
+
+</div>
+
+
+
+
+
+<div class="add-content">
+
+
+<h2>
+
+Create Another Question
+
+</h2>
+
+
+
+<p>
+
+Expand your form by adding more questions.
+Choose from different question types.
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<button id="addQuestionBtn"
+        type="button"
+        class="add-question-btn">
+
+
+<i class="fa-solid fa-plus"></i>
+
+
+Add New Question
+
+
+</button>
+
+
+
+</div>
+
+
+
+</section>
+
+
+
+</section>
+</main>
+
+
+
+
+
+
+<!-- ================= SIDEBAR ================= -->
+
+
+<aside class="sidebar">
+
+
+
+
+
+
+<!-- LIVE PREVIEW -->
+
+
+<div class="sidebar-card">
+
+
+
+<div class="sidebar-header">
+
+
+<i class="fa-solid fa-eye"></i>
+
+
+<h3>
+
+Live Preview
+
+</h3>
+
+
+</div>
+
+
+
+
+
+
+<div class="preview-card">
+
+
+<h2>
+
+{{ form.title }}
+
+</h2>
+
+
+
+<p>
+
+{{ form.description }}
+
+</p>
+
+
+
+
+
+<div class="preview-divider"></div>
+
+
+
+
+
+
+
+<div id="livePreview">
+
+
+
+{% for question in form.questions[:3] %}
+
+
+
+<div class="preview-question">
+
+
+<label>
+
+{{ question.label }}
+
+</label>
+
+
+
+<input type="text"
+       placeholder="Preview Answer"
+       disabled>
+
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- FORM STATISTICS -->
+
+
+<div class="sidebar-card">
+
+
+
+<div class="sidebar-header">
+
+
+<i class="fa-solid fa-chart-simple"></i>
+
+
+<h3>
+
+Form Statistics
+
+</h3>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="stats-list">
+
+
+
+<div class="stat-item">
+
+
+<span>
+
+Total Questions
+
+</span>
+
+
+
+<strong id="sidebarQuestionCount">
+
+{{ form.questions|length }}
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="stat-item">
+
+
+<span>
+
+Total Responses
+
+</span>
+
+
+
+<strong>
+
+{{ total_responses|default(0) }}
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="stat-item">
+
+
+<span>
+
+Status
+
+</span>
+
+
+
+<strong class="draft-badge">
+
+Draft
+
+</strong>
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- QUICK ACTIONS -->
+
+
+<div class="sidebar-card">
+
+
+
+<div class="sidebar-header">
+
+
+<i class="fa-solid fa-bolt"></i>
+
+
+<h3>
+
+Quick Actions
+
+</h3>
+
+
+</div>
+
+
+
+
+
+
+<div class="quick-actions">
+
+
+
+
+
+<a href="{{ url_for('preview_form', form_id=form_id) }}"
+   class="action-btn">
+
+
+<i class="fa-solid fa-eye"></i>
+
+
+Preview Form
+
+
+</a>
+
+
+
+
+
+
+
+<a href="{{ url_for('responses', form_id=form_id) }}"
+   class="action-btn">
+
+
+<i class="fa-solid fa-table"></i>
+
+
+View Responses
+
+
+</a>
+
+
+
+
+
+
+
+<a href="{{ url_for('analytics', form_id=form_id) }}"
+   class="action-btn">
+
+
+<i class="fa-solid fa-chart-line"></i>
+
+
+Analytics
+
+
+</a>
+
+
+
+
+
+
+
+<button id="copyLinkBtn"
+        type="button"
+        class="action-btn">
+
+
+<i class="fa-solid fa-link"></i>
+
+
+Copy Form Link
+
+
+</button>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- AI SUGGESTIONS -->
+
+
+<div class="sidebar-card">
+
+
+
+<div class="sidebar-header">
+
+
+<i class="fa-solid fa-robot"></i>
+
+
+<h3>
+
+AI Suggestions
+
+</h3>
+
+
+</div>
+
+
+
+
+
+
+<div class="tips-box">
+
+
+
+<div class="tip">
+
+💡 Keep question labels short and clear.
+
+</div>
+
+
+
+<div class="tip">
+
+💡 Avoid too many required questions.
+
+</div>
+
+
+
+<div class="tip">
+
+💡 Use Dropdown for long option lists.
+
+</div>
+
+
+
+<div class="tip">
+
+💡 Ratings improve analytics quality.
+
+</div>
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+</aside>
+
+
+
+
+</div>
+
+
+</form>
+
+
+
+
+
+
+
+
+
+<!-- ================= QUESTION TEMPLATE ================= -->
+
+
+<template id="questionTemplate">
+
+
+
+<div class="question-card">
+
+
+
+
+
+<div class="question-card-header">
+
+
+
+<div class="question-title">
+
+
+<span class="question-badge">
+
+Question
+
+</span>
+
+
+
+<h3>
+
+New Question
+
+</h3>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="question-actions">
+
+
+<button type="button"
+        class="icon-btn duplicate-btn">
+
+
+<i class="fa-regular fa-copy"></i>
+
+
+</button>
+
+
+
+
+
+
+<button type="button"
+        class="icon-btn delete-btn">
+
+
+<i class="fa-solid fa-trash"></i>
+
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="question-body">
+
+
+
+
+
+<div class="input-group">
+
+
+<label>
+
+Question
+
+</label>
+
+
+
+
+<input type="text"
+       class="question-label"
+       placeholder="Enter question">
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="question-grid">
+
+
+
+<div class="input-group">
+
+
+<label>
+
+Question Type
+
+</label>
+
+
+
+
+<select class="question-type">
+
+
+
+<option value="text">
+
+Short Answer
+
+</option>
+
+
+
+<option value="paragraph">
+
+Paragraph
+
+</option>
+
+
+
+<option value="email">
+
+Email
+
+</option>
+
+
+
+<option value="number">
+
+Number
+
+</option>
+
+
+
+<option value="dropdown">
+
+Dropdown
+
+</option>
+
+
+
+<option value="radio">
+
+Radio
+
+</option>
+
+
+
+<option value="checkbox">
+
+Checkbox
+
+</option>
+
+
+
+<option value="rating">
+
+Rating
+
+</option>
+
+
+
+</select>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="input-group">
+
+
+<label>
+
+Required
+
+</label>
+
+
+
+<label class="switch">
+
+
+<input type="checkbox"
+       class="question-required">
+
+
+<span class="slider"></span>
+
+
+</label>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class="options-box"
+     style="display:none;">
+
+
+
+<label>
+
+Answer Options
+
+</label>
+
+
+
+
+<div class="options-list"></div>
+
+
+
+
+
+
+<button type="button"
+        class="add-option-btn">
+
+
+<i class="fa-solid fa-plus"></i>
+
+
+Add Option
+
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+</template>
+<script>
+
+
+const container = document.getElementById("questionsContainer");
+
+const template = document.getElementById("questionTemplate");
+
+const addBtn = document.getElementById("addQuestionBtn");
+
+const questionsInput = document.getElementById("questionsData");
+
+const editForm = document.getElementById("editForm");
+
+
+
+
+
+// ==========================================
+// UPDATE QUESTION JSON BEFORE SAVE
+// ==========================================
+
+
+function updateQuestionsJSON(){
+
+
+    let questions = [];
+
+
+
+    document.querySelectorAll(".question-card").forEach(card => {
+
+
+
+        let label =
+            card.querySelector(".question-label")?.value.trim() || "";
+
+
+
+        let type =
+            card.querySelector(".question-type")?.value || "text";
+
+
+
+        let required =
+            card.querySelector(".question-required")?.checked || false;
+
+
+
+        let options = [];
+
+
+
+        card.querySelectorAll(".option-input").forEach(input => {
+
+
+            if(input.value.trim()){
+
+
+                options.push(
+                    input.value.trim()
+                );
+
+
+            }
+
+
+        });
+
+
+
+
+
+        questions.push({
+
+            label,
+
+            type,
+
+            required,
+
+            options
+
+        });
+
+
+
+    });
+
+
+
+
+    questionsInput.value =
+        JSON.stringify(questions);
+
+
+
+}
+
+
+
+
+
+editForm.addEventListener(
+    "submit",
+    function(){
+
+        updateQuestionsJSON();
+
+    }
+);
+
+
+
+// ==========================================
+// ADD NEW QUESTION
+// ==========================================
+
+addBtn.addEventListener(
+    "click",
+    function(){
+
+
+        let clone =
+            template.content.cloneNode(true);
+
+
+
+        let addSection =
+            document.querySelector(
+                ".add-question-section"
+            );
+
+
+
+        addSection.before(clone);
+
+
+
+        updateNumbers();
+
+        updateCount();
+
+
+    }
+);
+// ==========================================
+// UPDATE QUESTION NUMBERS
+// ==========================================
+
+
+function updateNumbers(){
+
+
+    document.querySelectorAll(".question-card")
+    .forEach(
+        (card,index)=>{
+
+
+            let badge =
+                card.querySelector(".question-badge");
+
+
+
+            if(badge){
+
+
+                badge.innerText =
+                    "Question " + (index+1);
+
+
+
+            }
+
+
+
+
+            let title =
+                card.querySelector(".question-title h3");
+
+
+
+            if(title && !card.querySelector(".question-label").value){
+
+
+                title.innerText =
+                    "Untitled Question";
+
+
+            }
+
+
+
+        }
+    );
+
+
+
+}
+
+
+
+
+
+
+
+
+// ==========================================
+// UPDATE QUESTION COUNT
+// ==========================================
+
+
+function updateCount(){
+
+
+    let count =
+        document.querySelectorAll(".question-card").length;
+
+
+
+    document.getElementById("questionCount").innerText =
+        count;
+
+
+
+    document.getElementById("sidebarQuestionCount").innerText =
+        count;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+// ==========================================
+// DELETE QUESTION
+// ==========================================
+
+
+document.addEventListener(
+"click",
+function(e){
+
+
+
+    if(e.target.closest(".delete-btn")){
+
+
+
+        let cards =
+            document.querySelectorAll(".question-card");
+
+
+
+        if(cards.length <= 1){
+
+
+            alert(
+                "At least one question is required."
+            );
+
+
+            return;
+
+
+        }
+
+
+
+
+        e.target.closest(".question-card").remove();
+
+
+
+        updateNumbers();
+
+        updateCount();
+
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+
+
+
+
+// ==========================================
+// DUPLICATE QUESTION
+// ==========================================
+
+
+document.addEventListener(
+"click",
+function(e){
+
+
+
+    if(e.target.closest(".duplicate-btn")){
+
+
+        let card =
+            e.target.closest(".question-card");
+
+
+
+        let copy =
+            card.cloneNode(true);
+
+
+
+        let input =
+            copy.querySelector(".question-label");
+
+
+
+        if(input){
+
+
+            input.value += " (Copy)";
+
+
+        }
+
+
+
+        card.after(copy);
+
+
+
+        updateNumbers();
+
+        updateCount();
+
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+
+
+
+// ==========================================
+// QUESTION TYPE CHANGE
+// ==========================================
+
+
+document.addEventListener(
+"change",
+function(e){
+
+
+
+    if(
+        !e.target.classList.contains(
+            "question-type"
+        )
+    )
+    return;
+
+
+
+
+    let card =
+        e.target.closest(".question-card");
+
+
+
+    let optionsBox =
+        card.querySelector(".options-box");
+
+
+
+    let type =
+        e.target.value;
+
+
+
+
+    if(
+        [
+            "radio",
+            "checkbox",
+            "dropdown",
+            "rating"
+        ].includes(type)
+    ){
+
+
+
+        optionsBox.style.display =
+            "block";
+
+
+
+        let list =
+            optionsBox.querySelector(".options-list");
+
+
+
+        if(list.children.length === 0){
+
+
+
+            if(type === "rating"){
+
+
+
+                [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ]
+                .forEach(
+                    value =>
+                    addOption(list,value)
+                );
+
+
+
+            }
+            else{
+
+
+                addOption(list);
+
+                addOption(list);
+
+
+
+            }
+
+
+
+        }
+
+
+
+
+    }
+    else{
+
+
+        optionsBox.style.display =
+            "none";
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+
+
+
+// ==========================================
+// ADD / REMOVE OPTIONS
+// ==========================================
+
+
+function addOption(list,value=""){
+
+
+
+    let row =
+        document.createElement(
+            "div"
+        );
+
+
+
+    row.className =
+        "option-row";
+
+
+
+    row.innerHTML = `
+
+
+<input 
+type="text"
+class="option-input"
+value="${value}"
+placeholder="Option">
+
+
+
+<button type="button"
+class="remove-option">
+
+
+<i class="fa-solid fa-xmark"></i>
+
+
+</button>
+
+
+`;
+
+
+
+    list.appendChild(row);
+
+
+
+}
+
+
+
+
+
+
+
+document.addEventListener(
+"click",
+function(e){
+
+
+
+    if(
+        e.target.closest(".add-option-btn")
+    ){
+
+
+
+        let list =
+            e.target
+            .closest(".options-box")
+            .querySelector(".options-list");
+
+
+
+        addOption(list);
+
+
+
+    }
+
+
+
+
+
+
+    if(
+        e.target.closest(".remove-option")
+    ){
+
+
+        e.target
+        .closest(".option-row")
+        .remove();
+
+
+
+    }
+
+
+
+});
+
+
+
+
+
+
+
+
+
+// ==========================================
+// COPY FORM LINK
+// ==========================================
+
+
+document
+.getElementById("copyLinkBtn")
+.addEventListener(
+"click",
+function(){
+
+
+
+    let link =
+    "{{ url_for('open_form', form_id=form_id, _external=True) }}";
+
+
+
+    navigator.clipboard.writeText(link);
+
+
+
+    this.innerHTML = `
+
+<i class="fa-solid fa-check"></i>
+
+Copied!
+
+`;
+
+
+
+    setTimeout(
+        ()=>{
+
+
+            this.innerHTML = `
+
+<i class="fa-solid fa-link"></i>
+
+Copy Form Link
+
+`;
+
+
+
+        },
+        2000
+    );
+
+
+
+});
+
+
+
+
+
+
+
+// Initial count update
+
+updateCount();
+
+updateNumbers();
+
+
+
+</script>
+
+
+</body>
+
+</html>

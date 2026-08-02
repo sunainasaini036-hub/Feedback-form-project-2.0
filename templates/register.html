@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | AI Form Studio</title>
+
+
+    <link rel="stylesheet" 
+          href="{{ url_for('static', filename='auth.css') }}">
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+
+</head>
+
+
+<body>
+
+
+<div class="auth-container">
+
+
+    <div class="auth-logo">
+
+        <h1>
+            AI <span>Form Studio</span>
+        </h1>
+
+    </div>
+
+
+
+    <h2>
+        Create Account
+    </h2>
+    {% if error %}
+
+<div class="auth-error">
+
+    <i class="fa-solid fa-circle-exclamation"></i>
+
+    {{ error }}
+
+    </div>
+
+{% endif %}
+
+    <form method="POST"
+          onsubmit="return validatePassword()">
+
+
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+            <label>
+                Name
+            </label>
+
+
+            <input 
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required>
+
+        </div>
+
+
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+            <label>
+                Email
+            </label>
+
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required>
+
+        </div>
+
+
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+
+            <label>
+                Password
+            </label>
+
+
+            <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Create password"
+                required
+                onkeyup="checkPassword()">
+
+
+
+            <div class="password-rules">
+
+
+                <p id="length">
+                    ❌ Minimum 8 characters
+                </p>
+
+
+                <p id="uppercase">
+                    ❌ One uppercase letter
+                </p>
+
+
+                <p id="number">
+                    ❌ One number
+                </p>
+
+
+                <p id="special">
+                    ❌ One special character
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <!-- CONFIRM PASSWORD -->
+
+        <div class="form-group">
+
+
+            <label>
+                Confirm Password
+            </label>
+
+
+            <input
+                id="confirm_password"
+                type="password"
+                placeholder="Confirm password"
+                required>
+
+
+        </div>
+
+
+
+
+
+        <button class="auth-btn">
+
+            Register
+
+        </button>
+
+
+
+    </form>
+
+
+
+
+    <div class="auth-link">
+
+
+        Already have an account?
+
+
+        <a href="/login">
+
+            Login
+
+        </a>
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+function checkPassword(){
+
+
+    let password =
+    document.getElementById(
+        "password"
+    ).value;
+
+
+
+    updateRule(
+
+        "length",
+
+        password.length >= 8
+
+    );
+
+
+
+    updateRule(
+
+        "uppercase",
+
+        /[A-Z]/.test(password)
+
+    );
+
+
+
+    updateRule(
+
+        "number",
+
+        /[0-9]/.test(password)
+
+    );
+
+
+
+    updateRule(
+
+        "special",
+
+        /[@$!%*?&#]/.test(password)
+
+    );
+
+
+
+}
+
+
+
+
+function updateRule(id,status){
+
+
+    let element =
+    document.getElementById(id);
+
+
+
+    if(status){
+
+
+        element.innerHTML =
+        "✅ " + element.innerHTML.substring(2);
+
+
+    }
+
+    else{
+
+
+        element.innerHTML =
+        "❌ " + element.innerHTML.substring(2);
+
+
+    }
+
+
+}
+
+
+
+
+function validatePassword(){
+
+
+    let password =
+    document.getElementById(
+        "password"
+    ).value;
+
+
+
+    let confirmPassword =
+    document.getElementById(
+        "confirm_password"
+    ).value;
+
+
+
+    let valid =
+
+        password.length >= 8 &&
+
+        /[A-Z]/.test(password) &&
+
+        /[0-9]/.test(password) &&
+
+        /[@$!%*?&#]/.test(password);
+
+
+
+
+    if(!valid){
+
+
+        alert(
+        "Password must contain:\n\nMinimum 8 characters\nOne uppercase letter\nOne number\nOne special character"
+        );
+
+
+        return false;
+
+
+    }
+
+
+
+
+
+    if(password !== confirmPassword){
+
+
+        alert(
+            "Passwords do not match"
+        );
+
+
+        return false;
+
+
+    }
+
+
+
+    return true;
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

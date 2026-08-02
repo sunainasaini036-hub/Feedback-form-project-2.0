@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ form.title }} | Responses</title>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responses.css') }}">
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- ========================================= -->
+    <!-- NAVBAR -->
+    <!-- ========================================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+            AI Form Generator
+
+        </div>
+
+        <div class="nav-buttons">
+
+            <a href="{{ url_for('analytics',form_id=form_id) }}" class="nav-btn">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Analytics
+
+            </a>
+
+            <a href="{{ url_for('open_form',form_id=form_id) }}" class="nav-btn">
+
+                <i class="fa-solid fa-eye"></i>
+
+                Open Form
+
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- ========================================= -->
+    <!-- BACK BUTTON -->
+    <!-- ========================================= -->
+
+    <div class="page-nav">
+
+        <a href="{{ url_for('analytics',form_id=form_id) }}" class="back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Analytics
+
+        </a>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================= -->
+
+    <header class="dashboard-header">
+
+        <div class="dashboard-left">
+
+            <span class="dashboard-badge">
+
+                <i class="fa-solid fa-table"></i>
+
+                Response Dashboard
+
+            </span>
+
+            <h1>
+
+                {{ form.title }}
+
+            </h1>
+
+            <p>
+
+                Browse every submitted response,
+                inspect individual answers,
+                and export your collected data.
+
+            </p>
+
+        </div>
+
+        <div class="dashboard-right">
+
+            <a href="{{ url_for('export_csv',form_id=form_id) }}" class="primary-btn">
+
+                <i class="fa-solid fa-file-csv"></i>
+
+                Export CSV
+
+            </a>
+
+        </div>
+
+    </header>
+
+    <!-- ========================================= -->
+    <!-- DASHBOARD -->
+    <!-- ========================================= -->
+
+    <div class="dashboard">
+
+        <!-- ========================================= -->
+        <!-- OVERVIEW -->
+        <!-- ========================================= -->
+
+        <section class="overview-section">
+
+            <div class="overview-grid">
+
+                <div class="overview-card">
+
+                    <div class="overview-icon purple">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Total Responses</span>
+
+                        <h2>{{ total_responses }}</h2>
+
+                    </div>
+
+                </div>
+
+                <div class="overview-card">
+
+                    <div class="overview-icon blue">
+
+                        <i class="fa-solid fa-list-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Total Questions</span>
+
+                        <h2>{{ form.questions|length }}</h2>
+
+                    </div>
+
+                </div>
+
+                <div class="overview-card">
+
+                    <div class="overview-icon green">
+
+                        <i class="fa-solid fa-calendar-days"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Latest Response</span>
+
+                        <h2>
+
+                            {% if responses %}
+
+                            {{ responses[0].submitted_at }}
+
+                            {% else %}
+
+                            --
+
+                            {% endif %}
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ========================================= -->
+        <!-- RESPONSES LIST -->
+        <!-- ========================================= -->
+
+        <section class="responses-section">
+
+            <div class="section-heading">
+
+                <span class="section-tag">
+
+                    Submitted Responses
+
+                </span>
+
+                <h2>
+
+                    Individual Response Details
+
+                </h2>
+
+                <p>
+
+                    Every submitted response is displayed below.
+
+                </p>
+
+            </div>
+            {% if responses %}
+
+            {% for response in responses %}
+
+            <div class="response-card">
+
+                <div class="response-card-header">
+
+                    <div class="response-number">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <span>
+
+                            Response {{ loop.index }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="response-date">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        {{ response.submitted_at }}
+
+                    </div>
+
+                </div>
+
+                <div class="response-body">
+
+                    {% for key,value in response.answers.items() %}
+
+                    <div class="answer-item">
+
+                        <div class="answer-question">
+
+                            <i class="fa-solid fa-circle-question"></i>
+
+                            {{ key }}
+
+                        </div>
+
+                        <div class="answer-value">
+
+                            {% if value is iterable and value is not string %}
+
+                            {{ value|join(", ") }}
+
+                            {% else %}
+
+                            {{ value }}
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-inbox"></i>
+
+                <h2>
+
+                    No Responses Yet
+
+                </h2>
+
+                <p>
+
+                    Once someone submits your form,
+                    every response will appear here.
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+    <!-- ====================================== -->
+    <!-- FOOTER -->
+    <!-- ====================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <div>
+
+                <h3>
+
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                    AI Form Generator
+
+                </h3>
+
+                <p>
+
+                    Responses Dashboard
+
+                </p>
+
+            </div>
+
+            <div>
+
+                © 2026 All Rights Reserved
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

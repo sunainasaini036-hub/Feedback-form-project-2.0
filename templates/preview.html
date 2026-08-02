@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- ========================================= -->
+    <!-- META -->
+    <!-- ========================================= -->
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        {{ form.title }} | AI Form Generator
+
+    </title>
+
+    <!-- ========================================= -->
+    <!-- GOOGLE FONT -->
+    <!-- ========================================= -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- ========================================= -->
+    <!-- FONT AWESOME -->
+    <!-- ========================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- ========================================= -->
+    <!-- CSS -->
+    <!-- ========================================= -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/preview.css') }}">
+
+</head>
+
+<body>
+
+<!-- ========================================= -->
+<!-- BACK TO HOME -->
+<!-- ========================================= -->
+{% if source == "myforms" %}
+
+<a href="{{ url_for('my_forms') }}" class="back-btn">
+
+    <i class="fa-solid fa-arrow-left"></i>
+
+    Back to My Forms
+
+</a>
+
+
+{% else %}
+
+
+<a href="{{ url_for('home') }}" class="back-btn">
+
+    <i class="fa-solid fa-arrow-left"></i>
+
+    Back to Home
+
+</a>
+
+
+{% endif %}
+
+<!-- ========================================= -->
+<!-- FLASH MESSAGE -->
+<!-- ========================================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+<div class="flash-wrapper">
+
+    {% for category, message in messages %}
+
+    <div class="flash-message {{ category }}">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <span>
+
+            {{ message }}
+
+        </span>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endwith %}
+
+<!-- ========================================= -->
+<!-- NAVBAR -->
+<!-- ========================================= -->
+
+<nav class="navbar">
+
+    <!-- LEFT -->
+
+    <div class="navbar-left">
+
+        <div class="logo-icon">
+
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+
+                AI Form Generator
+
+            </h2>
+
+            <p>
+
+                AI-Powered Feedback Analysis System
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CENTER -->
+
+    <div class="navbar-center">
+
+        {% if form.status=="published" %}
+
+        <span class="status published">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            Published
+
+        </span>
+
+        {% else %}
+
+        <span class="status draft">
+
+            <i class="fa-solid fa-clock"></i>
+
+            Draft
+
+        </span>
+
+        {% endif %}
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="navbar-right">
+
+        {% if form.status=="draft" %}
+
+        <a href="{{ url_for('edit_form',form_id=form_id) }}"
+           class="nav-btn secondary">
+
+            <i class="fa-solid fa-pen"></i>
+
+            Edit
+
+        </a>
+
+        <form action="{{ url_for('publish_form_route',form_id=form_id) }}"
+              method="POST">
+
+            <button class="nav-btn primary">
+
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                Publish
+
+            </button>
+
+        </form>
+
+        {% else %}
+
+        <a href="{{ url_for('open_form',form_id=form_id) }}"
+           target="_blank"
+           class="nav-btn secondary">
+
+            <i class="fa-solid fa-up-right-from-square"></i>
+
+            Open Form
+
+        </a>
+
+        <a href="{{ url_for('responses',form_id=form_id) }}"
+           class="nav-btn secondary">
+
+            <i class="fa-solid fa-table"></i>
+
+            Responses
+
+        </a>
+
+        <a href="{{ url_for('analytics',form_id=form_id) }}"
+           class="nav-btn primary">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            Analytics
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+<!-- ========================================= -->
+<!-- WORKFLOW -->
+<!-- ========================================= -->
+
+<section class="workflow">
+
+    <div class="step completed">
+
+        <div class="step-icon">
+
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+        </div>
+
+        <span>
+
+            Generate
+
+        </span>
+
+    </div>
+
+    <div class="line completed"></div>
+
+    <div class="step completed">
+
+        <div class="step-icon">
+
+            <i class="fa-solid fa-eye"></i>
+
+        </div>
+
+        <span>
+
+            Preview
+
+        </span>
+
+    </div>
+
+    <div class="line completed"></div>
+
+    <div class="step completed">
+
+        <div class="step-icon">
+
+            <i class="fa-solid fa-pen"></i>
+
+        </div>
+
+        <span>
+
+            Edit
+
+        </span>
+
+    </div>
+
+    <div class="line {% if form.status=='published' %}completed{% endif %}"></div>
+
+    <div class="step {% if form.status=='published' %}completed{% else %}active{% endif %}">
+
+        <div class="step-icon">
+
+            {% if form.status=="published" %}
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            {% else %}
+
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+            {% endif %}
+
+        </div>
+
+        <span>
+
+            {% if form.status=="published" %}
+
+            Published
+
+            {% else %}
+
+            Publish
+
+            {% endif %}
+
+        </span>
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- HERO -->
+<!-- ========================================= -->
+
+<section class="hero">
+
+    <div class="hero-left">
+
+        <span class="hero-tag">
+
+            <i class="fa-solid fa-sparkles"></i>
+
+            AI Generated Form
+
+        </span>
+
+        <h1>
+
+            {{ form.title }}
+
+        </h1>
+
+        <p>
+
+            {{ form.description }}
+
+        </p>
+
+    </div>
+
+    <div class="hero-right">
+
+        {% if form.status=="published" %}
+
+        <div class="hero-badge published">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            Published
+
+        </div>
+
+        {% else %}
+
+        <div class="hero-badge draft">
+
+            <i class="fa-solid fa-clock"></i>
+
+            Draft
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- HERO STATS -->
+<!-- ========================================= -->
+
+<section class="hero-stats">
+
+    <div class="stat-card">
+
+        <i class="fa-solid fa-list-check"></i>
+
+        <h2>
+
+            {{ form.questions|length }}
+
+        </h2>
+
+        <p>
+
+            Questions
+
+        </p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <i class="fa-solid fa-users"></i>
+
+        <h2>
+
+            {{ total_responses }}
+
+        </h2>
+
+        <p>
+
+            Responses
+
+        </p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <i class="fa-solid fa-calendar-plus"></i>
+
+        <h2>
+
+            {{ form.created_at }}
+
+        </h2>
+
+        <p>
+
+            Created
+
+        </p>
+
+    </div>
+
+    <div class="stat-card">
+
+        <i class="fa-solid fa-clock-rotate-left"></i>
+
+        <h2>
+
+            {{ form.updated_at if form.updated_at else "--" }}
+
+        </h2>
+
+        <p>
+
+            Updated
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- PREVIEW MODE -->
+<!-- ========================================= -->
+
+<section class="preview-banner">
+
+    <i class="fa-solid fa-eye"></i>
+
+    <div>
+
+        <h3>
+
+            Preview Mode
+
+        </h3>
+
+        <p>
+
+            Review your form before sharing it with respondents.
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- MAIN DASHBOARD -->
+<!-- ========================================= -->
+
+<main class="dashboard">
+
+    <!-- LEFT PANEL STARTS HERE -->
+
+    <section class="left-panel">
+<!-- ========================================= -->
+<!-- LIVE PREVIEW CARD -->
+<!-- ========================================= -->
+
+<div class="preview-card">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="preview-header">
+
+        <div class="preview-left">
+
+            <span class="preview-label">
+
+                <i class="fa-solid fa-eye"></i>
+
+                Live Preview
+
+            </span>
+
+            <p>
+
+                This is exactly how respondents will experience your form.
+
+            </p>
+
+        </div>
+
+        <div class="preview-right">
+
+            <span class="device-badge">
+
+                <i class="fa-solid fa-desktop"></i>
+
+                Desktop Preview
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FORM ================= -->
+
+    <form action="{{ url_for('submit') }}"
+          method="POST">
+
+        <input type="hidden"
+               name="form_id"
+               value="{{ form_id }}">
+
+        {% for question in form.questions %}
+
+        <!-- ========================================= -->
+        <!-- QUESTION CARD -->
+        <!-- ========================================= -->
+
+        <div class="question-card">
+
+            <!-- Question Header -->
+
+            <div class="question-header">
+
+                <div class="question-number">
+
+                    {{ loop.index }}
+
+                </div>
+
+                <div class="question-title">
+
+                    <h3>
+
+                        {{ question.label }}
+
+                        {% if question.required %}
+
+                        <span class="required">*</span>
+
+                        {% endif %}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <!-- ========================================= -->
+            <!-- TEXT -->
+            <!-- ========================================= -->
+
+            {% if question.type=="text" %}
+
+            <input
+                type="text"
+                name="{{ question.label }}"
+                placeholder="Enter your answer here..."
+                {% if question.required %}required{% endif %}>
+
+            <!-- ========================================= -->
+            <!-- EMAIL -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="email" %}
+
+            <input
+                type="email"
+                name="{{ question.label }}"
+                placeholder="example@email.com"
+                {% if question.required %}required{% endif %}>
+
+            <!-- ========================================= -->
+            <!-- PARAGRAPH -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="paragraph" %}
+
+            <textarea
+                rows="5"
+                name="{{ question.label }}"
+                placeholder="Write your response..."
+                {% if question.required %}required{% endif %}></textarea>
+
+            <!-- ========================================= -->
+            <!-- NUMBER -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="number" %}
+
+            <input
+                type="number"
+                name="{{ question.label }}"
+                placeholder="Enter a number"
+                {% if question.required %}required{% endif %}>
+
+            <!-- ========================================= -->
+            <!-- DATE -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="date" %}
+
+            <input
+                type="date"
+                name="{{ question.label }}"
+                {% if question.required %}required{% endif %}>
+
+            <!-- ========================================= -->
+            <!-- TIME -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="time" %}
+
+            <input
+                type="time"
+                name="{{ question.label }}"
+                {% if question.required %}required{% endif %}>
+
+            <!-- ========================================= -->
+            <!-- DROPDOWN -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="dropdown" %}
+
+            <select
+                name="{{ question.label }}"
+                {% if question.required %}required{% endif %}>
+
+                <option value="">
+
+                    Select an option
+
+                </option>
+
+                {% for option in question.options %}
+
+                <option value="{{ option }}">
+
+                    {{ option }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+            <!-- ========================================= -->
+            <!-- RATING -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="rating" %}
+
+            <div class="rating-preview">
+
+                <select
+                    name="{{ question.label }}"
+                    {% if question.required %}required{% endif %}>
+
+                    <option value="">
+
+                        Select Rating
+
+                    </option>
+
+                    <option value="1">⭐</option>
+
+                    <option value="2">⭐⭐</option>
+
+                    <option value="3">⭐⭐⭐</option>
+
+                    <option value="4">⭐⭐⭐⭐</option>
+
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+
+                </select>
+
+            </div>
+
+            <!-- ========================================= -->
+            <!-- RADIO -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="radio" %}
+
+            <div class="options-group">
+
+                {% for option in question.options %}
+
+                <label class="option-card">
+
+                    <input
+                        type="radio"
+                        name="{{ question.label }}"
+                        value="{{ option }}"
+                        {% if question.required %}required{% endif %}>
+
+                    <span>
+
+                        {{ option }}
+
+                    </span>
+
+                </label>
+
+                {% endfor %}
+
+            </div>
+
+            <!-- ========================================= -->
+            <!-- CHECKBOX -->
+            <!-- ========================================= -->
+
+            {% elif question.type=="checkbox" %}
+
+            <div class="options-group">
+
+                {% for option in question.options %}
+
+                <label class="option-card">
+
+                    <input
+                        type="checkbox"
+                        name="{{ question.label }}"
+                        value="{{ option }}">
+
+                    <span>
+
+                        {{ option }}
+
+                    </span>
+
+                </label>
+
+                {% endfor %}
+
+            </div>
+
+            <!-- ========================================= -->
+            <!-- DEFAULT -->
+            <!-- ========================================= -->
+
+            {% else %}
+
+            <input
+                type="text"
+                name="{{ question.label }}"
+                placeholder="Enter your answer"
+                {% if question.required %}required{% endif %}>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+        <!-- ========================================= -->
+        <!-- PREVIEW NOTICE -->
+        <!-- ========================================= -->
+
+        <div class="preview-notice">
+
+            <div class="notice-icon">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+            </div>
+
+            <div class="notice-content">
+
+                <h4>
+
+                    Preview Mode
+
+                </h4>
+
+                <p>
+
+                    This preview matches the public form that respondents will see after publishing.
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================= -->
+        <!-- SUBMIT BUTTON -->
+        <!-- ========================================= -->
+
+        <button
+            type="submit"
+            class="submit-btn">
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+            Submit Test Response
+
+        </button>
+
+    </form>
+
+</div>
+
+</section>
+
+<!-- ========================================= -->
+<!-- RIGHT PANEL START -->
+<!-- ========================================= -->
+
+<aside class="right-panel">
+        <!-- ========================================= -->
+        <!-- QUICK ACTIONS -->
+        <!-- ========================================= -->
+
+        <section class="actions-section">
+
+            <h2 class="section-title">
+
+                <i class="fa-solid fa-bolt"></i>
+
+                Quick Actions
+
+            </h2>
+
+            <div class="actions-grid">
+
+                <!-- Edit -->
+
+                <a href="{{ url_for('edit_form', form_id=form_id) }}"
+                   class="action-card">
+
+                    <div class="action-icon purple">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                    </div>
+
+                    <h3>Edit Form</h3>
+
+                    <p>Modify questions, title and description.</p>
+
+                </a>
+
+                <!-- Publish -->
+
+                {% if form.status == "draft" %}
+
+                <form action="{{ url_for('publish_form_route', form_id=form_id) }}"
+                      method="POST"
+                      class="action-form">
+
+                    <button class="action-card publish-card">
+
+                        <div class="action-icon green">
+
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                        </div>
+
+                        <h3>Publish</h3>
+
+                        <p>Make this form live for everyone.</p>
+
+                    </button>
+
+                </form>
+
+                {% else %}
+
+                <a href="{{ share_link }}"
+                   target="_blank"
+                   class="action-card">
+
+                    <div class="action-icon blue">
+
+                        <i class="fa-solid fa-up-right-from-square"></i>
+
+                    </div>
+
+                    <h3>Open Public Form</h3>
+
+                    <p>Open the published version.</p>
+
+                </a>
+
+                {% endif %}
+
+                <!-- Responses -->
+
+{% if form.status=="published" %}
+
+<a href="{{ url_for('responses', form_id=form_id) }}"
+   class="action-card">
+
+    <div class="action-icon orange">
+
+        <i class="fa-solid fa-table"></i>
+
+    </div>
+
+    <h3>Responses</h3>
+
+    <p>View submitted responses.</p>
+
+</a>
+
+{% else %}
+
+<div class="action-card locked-card">
+
+    <div class="action-icon orange">
+
+        <i class="fa-solid fa-lock"></i>
+
+    </div>
+
+    <h3>Responses Locked</h3>
+
+    <p>
+        Publish your form to collect responses.
+    </p>
+
+</div>
+
+{% endif %}
+
+                <!-- Analytics -->
+
+{% if form.status=="published" %}
+
+<a href="{{ url_for('analytics', form_id=form_id) }}"
+   class="action-card">
+
+    <div class="action-icon red">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+    </div>
+
+    <h3>Analytics</h3>
+
+    <p>
+        Visual reports and AI insights.
+    </p>
+
+</a>
+
+{% else %}
+
+<div class="action-card locked-card">
+
+    <div class="action-icon red">
+
+        <i class="fa-solid fa-lock"></i>
+
+    </div>
+
+    <h3>Analytics Locked</h3>
+
+    <p>
+        Unlock analytics after publishing your form.
+    </p>
+
+</div>
+
+{% endif %}
+                <!-- Delete -->
+
+                <form action="{{ url_for('delete_form_route', form_id=form_id) }}"
+                      method="POST"
+                      class="action-form"
+                      onsubmit="return confirm('Delete this form permanently?')">
+
+                    <button class="action-card delete-card">
+
+                        <div class="action-icon dark">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </div>
+
+                        <h3>Delete Form</h3>
+
+                        <p>Remove this form permanently.</p>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+            <!-- ========================================= -->
+        <!-- SHARE CENTER -->
+        <!-- ========================================= -->
+
+        {% if form.status == "published" %}
+
+        <section class="share-section">
+
+            <h2 class="section-title">
+
+                <i class="fa-solid fa-share-nodes"></i>
+
+                Share Your Form
+
+            </h2>
+
+            <div class="share-grid">
+
+                <!-- Left -->
+
+                <div class="share-card">
+
+                    <div class="share-success">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        <div>
+
+                            <h3>Your form is live!</h3>
+
+                            <p>
+                                Anyone with this link can now submit responses.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <label>
+
+                        Public Link
+
+                    </label>
+
+                    <div class="copy-box">
+
+                        <input
+                            id="shareLink"
+                            type="text"
+                            readonly
+                            value="{{ share_link }}">
+
+                        <button
+                            class="copy-btn"
+                            onclick="copyLink()">
+
+                            <i class="fa-solid fa-copy"></i>
+
+                            Copy
+
+                        </button>
+
+                    </div>
+
+<div class="share-buttons">
+<button
+    class="share-action"
+    onclick="shareForm()">
+
+    <i class="fa-solid fa-share-nodes"></i>
+
+    Share Form
+
+</button>
+
+</div>
+                </div>
+
+                <!-- Right -->
+
+                <div class="qr-card">
+
+                    <img src="{{ qr_code_url }}"
+                         alt="QR Code">
+
+                    <a href="{{ qr_code_url }}"
+                       download
+                       class="download-btn">
+
+                        <i class="fa-solid fa-download"></i>
+
+                        Download QR
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+                <!-- ========================================= -->
+        <!-- FORM INFORMATION -->
+        <!-- ========================================= -->
+
+        <section class="details-section">
+
+            <h2 class="section-title">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                Form Information
+
+            </h2>
+
+            <div class="details-grid">
+
+                <!-- Created -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-calendar-plus"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+
+                            Created
+
+                        </span>
+
+                        <h3>
+
+                            {{ form.created_at }}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+                <!-- Updated -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-pen-to-square"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+
+                            Last Updated
+
+                        </span>
+
+                        <h3>
+
+                            {% if form.updated_at %}
+
+                                {{ form.updated_at }}
+
+                            {% else %}
+
+                                Not Updated
+
+                            {% endif %}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+                <!-- Published -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+
+                            Published On
+
+                        </span>
+
+                        <h3>
+
+                            {% if form.published_at %}
+
+                                {{ form.published_at }}
+
+                            {% else %}
+
+                                Draft Form
+
+                            {% endif %}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+                <!-- Responses -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="detail-label">
+
+                            Total Responses
+
+                        </span>
+
+                        <h3>
+
+                            {{ total_responses }}
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+</aside>
+</main>      
+<!-- ========================================= -->
+<!-- FOOTER -->
+<!-- ========================================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div>
+
+            <h3>
+
+                AI Form Generator
+
+            </h3>
+
+            <p>
+
+                Create • Publish • Analyze • Share
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <p>
+
+                Powered by Flask, SQLite & Gemini AI
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+<script>
+
+function copyLink(){
+
+    const input=document.getElementById("shareLink");
+
+    navigator.clipboard.writeText(input.value);
+
+    const btn=document.querySelector(".copy-btn");
+
+    btn.innerHTML="<i class='fa-solid fa-check'></i> Copied";
+
+    setTimeout(function(){
+
+        btn.innerHTML="<i class='fa-solid fa-copy'></i> Copy";
+
+    },2000);
+
+}
+
+setTimeout(function(){
+
+    const flash=document.querySelector(".flash");
+
+    if(flash){
+
+        flash.style.opacity="0";
+
+        flash.style.transform="translateY(-15px)";
+
+        setTimeout(()=>{
+
+            flash.remove();
+
+        },400);
+
+    }
+
+},3000);
+function shareForm(){
+
+    const link =
+    document.getElementById("shareLink").value;
+
+
+    if(navigator.share){
+
+        navigator.share({
+
+            title:"AI Form Generator",
+
+            text:"Please fill this feedback form",
+
+            url:link
+
+        })
+
+        .catch(error=>{
+
+            console.log(error);
+
+        });
+
+
+    }
+    else{
+
+        navigator.clipboard.writeText(link);
+
+        alert("Form link copied!");
+
+    }
+
+}
+</script>
+</body>
+</html>
